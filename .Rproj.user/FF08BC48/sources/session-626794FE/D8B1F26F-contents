@@ -1,0 +1,759 @@
+
+#Cargar paquetes-------------------------
+pacman::p_load(tidyverse,
+               haven,
+               dplyr,
+               magrittr,
+               sjmisc, #Para explorar datos
+               sjPlot, #Para los gráficos
+               ggpubr, #Para incorporar correlación en scatterplot (grid)
+               grid, #Para incorporar correlación en scatterplot
+               ggrepel, #Para evitar solapamientos en gráfico
+               forcats,
+               car,
+               knitr,
+               srvyr,
+               sjlabelled,
+               knitr,
+               srvyr)  
+
+
+#Cargar datos----------------------------
+
+septiembre_2021 <- read.csv("input/data/septiembre-2021.csv", sep=";", 
+                           encoding = "UTF-8", stringsAsFactors = F) # se agrega sep=";" ya que las columnas van separadas con ese caracter
+
+octubre_2021 <- read.csv("input/data/octubre-2021.csv", sep=";", 
+                           encoding = "UTF-8", stringsAsFactors = F) # se agrega sep=";" ya que las columnas van separadas con ese caracter
+
+
+noviembre_2021 <- read.csv("input/data/noviembre-2021.csv", sep=";", 
+                           encoding = "UTF-8", stringsAsFactors = F) # se agrega sep=";" ya que las columnas van separadas con ese caracter
+
+diciembre_2021 <- read.csv("input/data/diciembre-2021.csv", sep=";", 
+                           encoding = "UTF-8", stringsAsFactors = F) # se agrega sep=";" ya que las columnas van separadas con ese caracter
+
+####Igualar observaciones de los meses
+#hasta la 1312 mantener
+
+septiembre_2021 <- septiembre_2021[-c(1313:1373),] 
+
+octubre_2021 <- octubre_2021[-c(1313:1352),]
+
+noviembre_2021 <- noviembre_2021[-c(1313:1315),]
+
+#####Consolidar los 4 meses en un objeto
+
+Consolidado_Meses_1 <- 
+merge(septiembre_2021, octubre_2021,
+      by =  c("ID_Empresa",
+              "ano",
+              "mes",
+              "FE",
+              "c",
+              "t",
+              "M1",
+              "M2",
+              "M4",
+              "M5",
+              "M7",
+              "M_Otro",
+              "M1_NT",
+              "M2_NT",
+              "M4_NT",
+              "M5_NT",
+              "M7_NT",
+              "M_Otro_NT",
+              "NT_acto_pacto_Hombres_1",
+              "NT_acto_pacto_Hombres_2",
+              "NT_acto_pacto_Hombres_3",
+              "NT_acto_pacto_Hombres_4",
+              "NT_acto_pacto_Hombres_5.1",
+              "NT_acto_pacto_Hombres_5.2",
+              "NT_acto_pacto_Hombres_7",
+              "NT_acto_pacto_Hombres_8",
+              "NT_acto_pacto_Hombres_9",
+              "NT_acto_pacto_Mujeres_1",
+              "NT_acto_pacto_Mujeres_2",
+              "NT_acto_pacto_Mujeres_3",
+              "NT_acto_pacto_Mujeres_4",
+              "NT_acto_pacto_Mujeres_5.1",
+              "NT_acto_pacto_Mujeres_5.2",
+              "NT_acto_pacto_Mujeres_7",
+              "NT_acto_pacto_Mujeres_8",
+              "NT_acto_pacto_Mujeres_9",
+              "DL_acto_pacto_Hombres_1",
+              "DL_acto_pacto_Hombres_2",
+              "DL_acto_pacto_Hombres_3",
+              "DL_acto_pacto_Hombres_4",
+              "DL_acto_pacto_Hombres_5.1",
+              "DL_acto_pacto_Hombres_5.2",
+              "DL_acto_pacto_Hombres_7",
+              "DL_acto_pacto_Hombres_8",
+              "DL_acto_pacto_Hombres_9",
+              "DL_acto_pacto_Mujeres_1",
+              "DL_acto_pacto_Mujeres_2",
+              "DL_acto_pacto_Mujeres_3",
+              "DL_acto_pacto_Mujeres_4",
+              "DL_acto_pacto_Mujeres_5.1",
+              "DL_acto_pacto_Mujeres_5.2",
+              "DL_acto_pacto_Mujeres_7",
+              "DL_acto_pacto_Mujeres_8",
+              "DL_acto_pacto_Mujeres_9",
+              "S2_exp",
+              "NT_t"),
+      all = T)
+
+Consolidado_Meses_2 <- 
+  merge(noviembre_2021, diciembre_2021,
+        by =  c("ID_Empresa",
+                "ano",
+                "mes",
+                "FE",
+                "c",
+                "t",
+                "M1",
+                "M2",
+                "M4",
+                "M5",
+                "M7",
+                "M_Otro",
+                "M1_NT",
+                "M2_NT",
+                "M4_NT",
+                "M5_NT",
+                "M7_NT",
+                "M_Otro_NT",
+                "NT_acto_pacto_Hombres_1",
+                "NT_acto_pacto_Hombres_2",
+                "NT_acto_pacto_Hombres_3",
+                "NT_acto_pacto_Hombres_4",
+                "NT_acto_pacto_Hombres_5.1",
+                "NT_acto_pacto_Hombres_5.2",
+                "NT_acto_pacto_Hombres_7",
+                "NT_acto_pacto_Hombres_8",
+                "NT_acto_pacto_Hombres_9",
+                "NT_acto_pacto_Mujeres_1",
+                "NT_acto_pacto_Mujeres_2",
+                "NT_acto_pacto_Mujeres_3",
+                "NT_acto_pacto_Mujeres_4",
+                "NT_acto_pacto_Mujeres_5.1",
+                "NT_acto_pacto_Mujeres_5.2",
+                "NT_acto_pacto_Mujeres_7",
+                "NT_acto_pacto_Mujeres_8",
+                "NT_acto_pacto_Mujeres_9",
+                "DL_acto_pacto_Hombres_1",
+                "DL_acto_pacto_Hombres_2",
+                "DL_acto_pacto_Hombres_3",
+                "DL_acto_pacto_Hombres_4",
+                "DL_acto_pacto_Hombres_5.1",
+                "DL_acto_pacto_Hombres_5.2",
+                "DL_acto_pacto_Hombres_7",
+                "DL_acto_pacto_Hombres_8",
+                "DL_acto_pacto_Hombres_9",
+                "DL_acto_pacto_Mujeres_1",
+                "DL_acto_pacto_Mujeres_2",
+                "DL_acto_pacto_Mujeres_3",
+                "DL_acto_pacto_Mujeres_4",
+                "DL_acto_pacto_Mujeres_5.1",
+                "DL_acto_pacto_Mujeres_5.2",
+                "DL_acto_pacto_Mujeres_7",
+                "DL_acto_pacto_Mujeres_8",
+                "DL_acto_pacto_Mujeres_9",
+                "S2_exp",
+                "NT_t"),
+        all = T)
+
+Consolidado_Final <-
+  merge(Consolidado_Meses_1, Consolidado_Meses_2,
+        by =  c("ID_Empresa",
+                "ano",
+                "mes",
+                "FE",
+                "c",
+                "t",
+                "M1",
+                "M2",
+                "M4",
+                "M5",
+                "M7",
+                "M_Otro",
+                "M1_NT",
+                "M2_NT",
+                "M4_NT",
+                "M5_NT",
+                "M7_NT",
+                "M_Otro_NT",
+                "NT_acto_pacto_Hombres_1",
+                "NT_acto_pacto_Hombres_2",
+                "NT_acto_pacto_Hombres_3",
+                "NT_acto_pacto_Hombres_4",
+                "NT_acto_pacto_Hombres_5.1",
+                "NT_acto_pacto_Hombres_5.2",
+                "NT_acto_pacto_Hombres_7",
+                "NT_acto_pacto_Hombres_8",
+                "NT_acto_pacto_Hombres_9",
+                "NT_acto_pacto_Mujeres_1",
+                "NT_acto_pacto_Mujeres_2",
+                "NT_acto_pacto_Mujeres_3",
+                "NT_acto_pacto_Mujeres_4",
+                "NT_acto_pacto_Mujeres_5.1",
+                "NT_acto_pacto_Mujeres_5.2",
+                "NT_acto_pacto_Mujeres_7",
+                "NT_acto_pacto_Mujeres_8",
+                "NT_acto_pacto_Mujeres_9",
+                "DL_acto_pacto_Hombres_1",
+                "DL_acto_pacto_Hombres_2",
+                "DL_acto_pacto_Hombres_3",
+                "DL_acto_pacto_Hombres_4",
+                "DL_acto_pacto_Hombres_5.1",
+                "DL_acto_pacto_Hombres_5.2",
+                "DL_acto_pacto_Hombres_7",
+                "DL_acto_pacto_Hombres_8",
+                "DL_acto_pacto_Hombres_9",
+                "DL_acto_pacto_Mujeres_1",
+                "DL_acto_pacto_Mujeres_2",
+                "DL_acto_pacto_Mujeres_3",
+                "DL_acto_pacto_Mujeres_4",
+                "DL_acto_pacto_Mujeres_5.1",
+                "DL_acto_pacto_Mujeres_5.2",
+                "DL_acto_pacto_Mujeres_7",
+                "DL_acto_pacto_Mujeres_8",
+                "DL_acto_pacto_Mujeres_9",
+                "S2_exp",
+                "NT_t"),
+        all = T)
+
+#Eliminar data frames que no sirven
+remove(Consolidado_Meses_1,
+       Consolidado_Meses_2,
+       diciembre_2021,
+       noviembre_2021,
+       octubre_2021,
+       septiembre_2021)
+
+#Guardar Base de los 4 meses juntos
+
+saveRDS(Consolidado_Final, "output/data/Consolidado_Final")
+
+#datos proc
+
+datos_proc <- 
+  select(Consolidado_Final, 
+         ID_Empresa,
+         FE,
+         t,
+         c,
+         NT_t,
+         M1,
+         M2,
+         M4,
+         M5,
+         M7,
+         M1_NT,
+         M2_NT,
+         M4_NT,
+         M5_NT,
+         M7_NT)
+head(datos_proc)
+
+#recodificación
+#varible t "Tamaño según numero de trabajadores de la empresa"
+datos_proc <- datos_proc %>% 
+mutate(datos_proc =
+       case_when(t %in% c(1) ~ "Pequeña",
+                 t %in% c(2) ~ "Mediana",
+                 t %in% c(3) ~ "Grande",
+                 TRUE ~ NA_character_)) 
+
+#Variable c "Sección economica de la empresa"
+datos_proc <- datos_proc %>% 
+mutate(datos_proc, c=
+  case_when(c == "B"~"Mineria",
+            c == "C"~"Industria_Manufacturera",
+            c == "D"~"Suministro_de_Electricidad,Gas,Vapor_y_Aire_Acondicionado",
+            c == "E"~"Suministro_de_Agua,Evacuación_de_Aguas_Residuales,Gestión_de_desechos_y_Descontaminación",
+            c == "F"~"Construcción",
+            c == "G"~"Comercio",
+            c == "H"~"Transporte_y_Almacenamiento",
+            c == "I"~"Actividades_de_Alojamiento_y_Servicio_de_Comidas",
+            c == "J"~"Información_y_Comunicaciones",
+            c == "K"~"Actividades_Financieras_y_de_Seguros",
+            c == "L"~"Actividades_Inmobiliarias",
+            c == "M"~"Actividades_Profesionales,Cientificas_y_Técnicas",
+            c == "N"~"Actividades_de_Servicios_Administrativos_y_de_Apoyo",
+            c == "O"~"Administración_Pública",
+            c == "P"~"Enseñanza",
+            c == "Q"~"Actividades_de_Atención_de_la_Salud_Humana_y_de_Asistencia_Social",
+            c == "R"~"Actividades_Artísticas,de_Entretenimiento_y_Recreativas",
+            TRUE ~ NA_character_))
+  
+#Cambio a numeric y character
+datos_proc <- datos_proc %>% 
+mutate_at(vars(ID_Empresa,FE,NT_t,M1_NT,M2_NT,M4_NT,M5_NT,M7_NT), funs(as_numeric(.))) %>% 
+  mutate_at(vars(t,c,M1,M2,M4,M5,M7), funs(as.character(.)))
+
+#crear variable suma de pacto y acto trabajador
+datos_proc <- datos_proc %>% 
+  mutate(datos_proc,
+         "M1_NT+M2_NT" = M1_NT+M2_NT)
+
+#objeto exp
+objeto_exp <- datos_proc %>% 
+  as_survey_design(ids = ID_Empresa, weights = FE)
+
+#guardar datos proc
+saveRDS(datos_proc, "output/data/datos_proc")
+
+
+####Tabla 1----------------------------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#Crear variables para sector empresa
+Variables_Empresa_t1 <- 
+  select(Consolidado_Final,
+         mes,
+         Suspensión_por_Acto_Empresa = M1,
+         Suspensión_por_Pacto_Empresa = M2,
+         Pacto_Reducción_Empresa = M4,
+         Reducción_Remuneración_Empresa = M5,
+         Modalidad_Trabajo_Empresa = M7)
+
+Variables_Empresa_t1 <- Variables_Empresa_t1 %>%  mutate(Variables_Empresa_t1, mes= 
+                                                     case_when(mes == 9~"Septiembre",
+                                                               mes == 10~"Octubre",
+                                                               mes == 11~"Noviembre",
+                                                               mes == 12~"Diciembre"))
+#Crear variables para sector personas
+Variables_Persona_t1 <-
+  select(Consolidado_Final,
+         mes,
+         Suspensión_por_Acto_Persona = M1_NT,
+         Suspensión_por_Pacto_Persona = M2_NT,
+         Pacto_Reducción_Persona = M4_NT,
+         Reducción_Remuneración_Persona = M5_NT,
+         Modalidad_Trabajo_Persona = M7_NT)
+
+Variables_Persona_t1 <- Variables_Persona_t1 %>%  mutate(Variables_Persona_t1, mes= 
+                                                     case_when(mes == 9~"Septiembre",
+                                                               mes == 10~"Octubre",
+                                                               mes == 11~"Noviembre",
+                                                               mes == 12~"Diciembre"))
+
+
+#Tabla para sector empresa
+sjt.xtab(Variables_Empresa_t1$Suspensión_por_Acto_Empresa_t1, Variables_Empresa_t1$mes,
+         show.col.prc = T,
+         show.summary = F,
+         Encoding = "UTF-8",
+         show.na = F,
+         title = "tabla empresas")
+
+
+tab_stackfrq(as.data.frame(Variables_Empresa_t1 %>% 
+                             select("Suspensión_por_Acto_Empresa",
+                             "Suspensión_por_Pacto_Empresa",
+                             "Pacto_Reducción_Empresa",
+                             "Reducción_Remuneración_Empresa",
+                             "Modalidad_Trabajo_Empresa")),
+             show.n = T, show.total = T,
+             file = "output/data/tabla empresas")
+
+
+
+#Tabla sector personas
+
+sjt.xtab(Variables_Persona_t1$Suspensión_por_Acto_Persona, Variables_Persona$mes,
+         show.col.prc = T,
+         show.summary = F,
+         Encoding = "UTF-8",
+         show.na = F,
+         title = "tabla personas")
+
+
+tab_stackfrq(as.data.frame(Variables_Persona_t1 %>% 
+                             select("Suspensión_por_Acto_Persona",
+                                    "Suspensión_por_Pacto_Persona",
+                                    "Pacto_Reducción_Persona",
+                                    "Reducción_Remuneración_Persona",
+                                    "Modalidad_Trabajo_Persona")),
+             show.n = T, show.total = T,
+             file = "output/data/tabla personas")
+
+
+
+
+
+#### Tabla_1_Consolidada
+
+
+
+merge(tabla_1.1, tabla_1.2,
+      by = c("mes",
+             "Suspensión_por_Acto_Empresa",
+             "Suspensión_por_Pacto_Empresa",
+             "Pacto_Reducción_Empresa",
+             "Reducción_Remuneración_Empresa",
+             "Modalidad_Trabajo_Empresa",
+             "Suspensión_por_Acto_Trabajador",
+             "Suspensión_por_Pacto_Trabajador",
+             "Pacto_Reducción_Trabajador",
+             "Reducción_Remuneración_Trabajador",
+             "Modalidad_Trabajo_Trabajador"),
+      all = T)
+
+merge(tabla_1.1, tabla_1.2,
+      by = c("mes",
+             "Suspensión_por_Acto_Empresa",
+             "Suspensión_por_Pacto_Empresa",
+             "Pacto_Reducción_Empresa",
+             "Reducción_Remuneración_Empresa",
+             "Modalidad_Trabajo_Empresa",
+             "Suspensión_por_Acto_Trabajador",
+             "Suspensión_por_Pacto_Trabajador",
+             "Pacto_Reducción_Trabajador",
+             "Reducción_Remuneración_Trabajador",
+             "Modalidad_Trabajo_Trabajador"),
+      all = T)
+
+
+#Pasar los n.a por 0
+tabla_1.1[is.na(tabla_1)] <- 0
+
+####Tabla ejemplos aqui qui quiquqiuqiuquiq
+
+sjt.xtab(septiembre_2021$M1, 
+         octubre_2021$M1, 
+sjt.xtab(Variables_Empresa_t1$Suspensión_por_Acto_Empresa, Variables_Empresa$mes,
+         show.col.prc = T,
+         show.summary = F,
+         Encoding = "UTF-8",
+         ci(tabla_6, ci = 0.95,
+            effects = c("Suspensión_por_Acto_Persona", 
+                        "Reducción_Remuneración_Persona"),
+         show.na = F,
+
+         title = "tabla empresas")) %>% 
+
+         title = "tabla prueba")
+
+
+sjt.xtab(septiembre_2021$M1, octubre_2021$M1, 
+         show.col.prc = T,
+         show.row.prc = T,
+         show.summary = F,
+         encoding = "UTF-8",
+         title = "tabla prueba")
+
+
+sjt.xtab(noviembre_2021$M1, diciembre_2021$M1,
+         show.col.prc = T,
+         show.summary = F,
+         encoding = "UTF-8",
+         show.na = F,
+         title = "Prueba")
+
+
+
+
+sjt.xtab(tabla_1.1$Suspensión_por_Acto_Empresa, tabla_1.2$Suspensión_por_Acto_Empresa,
+         show.col.prc = T,
+         show.summary = T,
+         encoding = "UTF-8",
+         show.na = F,
+         title = "Porcentaje de empresas y personas trabajadoras afectadas por las distintas modalidades de suspensioón,teletrabajo,reducción de jornada y reducción de remuneraciones")
+
+
+sjt.xtab(tabla_1.1$Suspensión_por_Acto_Empresa, tabla_1.1$Suspensión_por_Pacto_Empresa,
+         show.col.prc = T,
+         show.summary = F,
+         encoding = "UTF-8",
+         show.na = F,
+         title = "Porcentaje de empresas y personas trabajadoras afectadas por las distintas modalidades de suspensioón,teletrabajo,reducción de jornada y reducción de remuneraciones")
+
+
+sjt.xtab(septiembre_2021,
+                   show.septiembre_2021.prc = TRUE,
+                   title = "Contraste de porcentajes de personas y empresas
+                   afectadas por las distintas modalidades de suspensión,
+                   teletrabajo, reducción de jornadas y reducción de remuneraciones",
+                          encoding = "CPS_N")
+
+sjt.xtab(data$septiembre_2021, data$noviembre_2021show.septiembre_2021, 
+         title = "Contraste de porcentajes de personas y empresas afectadas por las distintas modalidades de suspensión,teletrabajo, reducción de jornadas y reducción de remuneraciones",
+
+         title = "tabla empresas") %>% 
+
+  paste(sjt.xtab(Variables_Persona_t1$Suspensión_por_Acto_Persona, Variables_Persona$mes,
+                 show.col.prc = T,
+                 show.summary = F,
+                 Encoding = "UTF-8",
+                 show.na = F,
+                 title = "tabla personas"))
+
+
+
+
+
+####Tabla 2---------------------------------------------------------------------------------------------------------------- 
+
+#Crear variables para sector empresa
+
+Variables_Empresa_t2 <- 
+  select(Consolidado_Final,
+         mes, 
+         Sector_económico = c,
+         Suspensión_temporal_por_pacto_empresa = M2, 
+         Supensión_temportal_por_pacto_personas = M2_NT)
+
+Variables_Empresa_t2 <- Variables_Empresa_t2 %>%  mutate(Variables_Empresa_t2, mes= 
+                                                           case_when(mes == 9~"Septiembre",
+                                                                     mes == 10~"Octubre",
+                                                                     mes == 11~"Noviembre",
+                                                                     mes == 12~"Diciembre"))
+
+#Crear variables para sector personas
+Variables_Persona_t2 <-
+  select(Consolidado_Final,
+         mes,
+         Sector_económico = c,
+         Suspensión_temporal_por_pacto_persona = M2,
+         Suspensión_temporal_por_pacto_empresa = M2_NT)
+
+Variables_Persona_t2 <- Variables_Persona_t2 %>%  mutate(Variables_Persona_t2, mes= 
+                                                           case_when(mes == 9~"Septiembre",
+                                                                     mes == 10~"Octubre",
+                                                                     mes == 11~"Noviembre",
+                                                                     mes == 12~"Diciembre"))
+
+
+#Tabla para sector empresa
+
+sjt.xtab(Variables_Empresa_t2$Suspensión_por_Acto_Empresa_t2, 
+         Variables_Empresa_t2$mes,
+         show.col.prc = T,
+         show.summary = F,
+         Encoding = "UTF-8",
+         show.na = F,
+         title = "tabla empresas") %>%
+
+
+tab_stackfrq(as.data.frame(Variables_Empresa_t2 %>% 
+                             select("mes",
+                                    "Sector_económico",
+                                    "Suspensión_temporal_por_pacto_persona" ,
+                                    "Suspensión_temporal_por_pacto_empresa")),
+             show.n = T, show.total = T,
+             file = "output/data/tabla empresas")
+
+#Tabla sector personas
+
+sjt.xtab(Variables_Persona_t2$Suspensión_por_Acto_Persona, Variables_Persona$mes,
+         show.col.prc = T,
+         show.summary = F,
+         Encoding = "UTF-8",
+         show.na = F,
+         title = "tabla personas")
+
+
+tab_stackfrq(as.data.frame(Variables_Persona_t2 %>% 
+                             select("mes",
+                                    "Sector_económico",
+                                    "Suspensión_temporal_por_pacto_persona" ,
+                                    "Suspensión_temporal_por_pacto_empresa")),
+             show.n = T, show.total = T,
+             file = "output/data/tabla personas")
+
+#### Tabla_1_Consolidada
+
+merge(tabla_2.1, tabla_2.2,
+      by = c("mes",
+             "Suspensión_por_Acto_Empresa",
+             "Suspensión_por_Pacto_Empresa"),
+      all = T)
+
+merge(tabla_2.1, tabla_2.2,
+      by = c("mes",
+             "Suspensión_por_Acto_Empresa",
+             "Suspensión_por_Pacto_Empresa"),
+      all = T)
+
+
+
+####Septiembre
+tabla2.1 <- select(Consolidado_Final,
+                    mes,
+                    Sector_económico = c)
+
+
+
+tabla_2.1 <- tabla_2.1 %>% mutate(tabla_2.1, Sector_económico=
+           case_when(Sector_económico == "B"~"Mineria",
+                     Sector_económico == "C"~"Industria_Manufacturera",
+                     Sector_económico == "D"~"Suministro_de_Electricidad,Gas,Vapor_y_Aire_Acondicionado",
+                     Sector_económico == "E"~"Suministro_de_Agua,Evacuación_de_Aguas_Residuales,Gestión_de_desechos_y_Descontaminación",
+                     Sector_económico == "F"~"Construcción",
+                     Sector_económico == "G"~"Comercio",
+                     Sector_económico == "H"~"Transporte_y_Almacenamiento",
+                     Sector_económico == "I"~"Actividades_de_Alojamiento_y_Servicio_de_Comidas",
+                     Sector_económico == "J"~"Información_y_Comunicaciones",
+                     Sector_económico == "K"~"Actividades_Financieras_y_de_Seguros",
+                     Sector_económico == "L"~"Actividades_Inmobiliarias",
+                     Sector_económico == "M"~"Actividades_Profesionales,Cientificas_y_Técnicas",
+                     Sector_económico == "N"~"Actividades_de_Servicios_Administrativos_y_de_Apoyo",
+                     Sector_económico == "O"~"Administración_Pública",
+                     Sector_económico == "P"~"Enseñanza",
+                     Sector_económico == "Q"~"Actividades_de_Atención_de_la_Salud_Humana_y_de_Asistencia_Social",
+                     Sector_económico == "R"~"Actividades_Artísticas,de_Entretenimiento_y_Recreativas"))
+
+
+####Tabla 3----------------------------------------------------------------------------------------------------------------
+
+#Selección y recodificación
+
+Variables_empresa_t3 <- select(Consolidado_Final,
+                            mes,
+                            Tamaño_de_Empresa = t,
+                            Suspensión_por_Acto_Empresa = M1,
+                            Suspensión_por_Pacto_Empresa = M2,
+                            Suspensión_por_Acto_Trabajador = M1_NT,
+                            Suspensión_por_Pacto_Trabajador = M2_NT)#variables de interes
+
+
+
+#Ordenar tamaño de empresas
+Variables_empresa_t3 <- Variables_empresa_t3 %>% 
+  mutate(Variables_empresa_t3, Tamaño_de_Empresa = case_when(Tamaño_de_Empresa == 1~"Pequeñas_Empresas",
+                                            Tamaño_de_Empresa == 2~"Medianas_Empresas",
+                                            Tamaño_de_Empresa == 3~"Grandes_Empresas"))
+
+#Numero de los meses
+Variables_empresa_t3 <- Variables_empresa_t3 %>%  mutate(Variables_empresa_t3, mes= 
+                                                           case_when(mes == 9~"Septiembre",
+                                                                     mes == 10~"Octubre",
+                                                                     mes == 11~"Noviembre",
+                                                                     mes == 12~"Diciembre"))
+
+##### Tabla
+sjt.xtab(Variables_empresa_t3$Suspensión_por_Acto_Empresa, Variables_empresa_t3$mes,
+         show.col.prc = T,
+         show.summary = F,
+         Encoding = "UTF-8",
+         ci(Variables_empresa_t3, ci = 0.95,
+            effects = c("Suspensión_por_Acto_Empresa", 
+                        "Suspensión_por_Acto_Persona"),
+         show.na = F,
+         title = "tabla empresas")) %>% 
+
+
+  tab_stackfrq(as.data.frame(Variables_empresa_t3 %>% 
+                               select("Suspensión_por_Acto_Persona",
+                                      "Suspensión_por_Pacto_Persona",
+                                      "Pacto_Reducción_Persona",
+                                      "Reducción_Remuneración_Persona",
+                                      "Modalidad_Trabajo_Persona")),
+               show.n = T, show.total = T,
+               file = "output/data/tabla_3")
+
+
+
+####Tabla 6----------------------------------------------------------------------------------------------------------------- 
+
+####Septiembre
+tabla_6 <- select(Consolidado_Final,
+                    mes,
+                    Sector_económico = c,
+                    reducción_temporal_del_la_jornada_laboral_empresa = M4,
+                    reducción_temporal_del_la_jornada_laboral_persona = M4_NT)
+
+tabla_6 <- tabla_6 %>% mutate(tabla_6, Sector_económico=
+                                case_when(Sector_económico == "B"~"Mineria",
+                                          Sector_económico == "C"~"Industria_Manufacturera",
+                                          Sector_económico == "D"~"Suministro_de_Electricidad,Gas,Vapor_y_Aire_Acondicionado",
+                                          Sector_económico == "E"~"Suministro_de_Agua,Evacuación_de_Aguas_Residuales,Gestión_de_desechos_y_Descontaminación",
+                                          Sector_económico == "F"~"Construcción",
+                                          Sector_económico == "G"~"Comercio",
+                                          Sector_económico == "H"~"Transporte_y_Almacenamiento",
+                                          Sector_económico == "I"~"Actividades_de_Alojamiento_y_Servicio_de_Comidas",
+                                          Sector_económico == "J"~"Información_y_Comunicaciones",
+                                          Sector_económico == "K"~"Actividades_Financieras_y_de_Seguros",
+                                          Sector_económico == "L"~"Actividades_Inmobiliarias",
+                                          Sector_económico == "M"~"Actividades_Profesionales,Cientificas_y_Técnicas",
+                                          Sector_económico == "N"~"Actividades_de_Servicios_Administrativos_y_de_Apoyo",
+                                          Sector_económico == "O"~"Administración_Pública",
+                                          Sector_económico == "P"~"Enseñanza",
+                                          Sector_económico == "Q"~"Actividades_de_Atención_de_la_Salud_Humana_y_de_Asistencia_Social",
+                                          Sector_económico == "R"~"Actividades_Artísticas,de_Entretenimiento_y_Recreativas"))
+
+
+#Renombrar meses
+tabla_6 <- tabla_6 %>%  mutate(tabla_6, mes= 
+                                        case_when(mes == 9~"Septiembre",
+                                        mes == 10~"Octubre",
+                                        mes == 11~"Noviembre",
+                                        mes == 12~"Diciembre"))
+
+
+####Tabla
+sjt.xtab(tabla_6$reducción_temporal_del_la_jornada_laboral_empresa, Variables_empresa_t3$mes,
+         show.col.prc = T,
+         show.summary = F,
+         Encoding = "UTF-8",
+         show.na = F,
+         ci(tabla_6, ci = 0.95,
+            effects = c("reducción_temporal_del_la_jornada_laboral_empresa", 
+                        "reducción_temporal_del_la_jornada_laboral_persona"),
+         title = "tabla empresas")) %>%  
+  
+tab_stackfrq(as.data.frame(tabla_6 %>% 
+                             select(reducción_temporal_del_la_jornada_laboral_persona)),
+             show.n = T, show.total = T,
+             file = "output/data/tabla_6")
+
+####Tabla inventada---------------------------------------------------------------------------
+tabla_inventada <- select(Consolidado_Final,
+                          mes,
+                          Otra_modalidad_empresa = M_Otro,
+                          Otra_modalidad_persona = M_Otro_NT)
+
+
+tabla_inventada <- tabla_inventada %>%  mutate(tabla_inventada, mes= 
+                                        case_when(mes == 9~"Septiembre",
+                                           mes == 10~"Octubre",
+                                           mes == 11~"Noviembre",
+                                           mes == 12~"Diciembre"))
+
+
+sjt.xtab(tabla_inventada$Otra_modalidad_empresa, tabla_inventada$Otra_modalidad_persona,
+         show.col.prc = T,
+         show.summary = F,
+         Encoding = "UTF-8",
+         show.na = F,
+         ci(tabla_6, ci = 0.95,
+            effects = c("Otra_modalidad_empresa", 
+                        "Otra_modalidad_persona"),
+            title = "tabla inventada"))
+
+
+#En caso de no llegar a los mismos resultados, investigue y discuta posibles razones de porqué no llegó al mismo resultado del informe. 
+
+#Se presume que no se llega a los mismos resultados ya que los 4 meses en cuestión, no tienen recolectada las mismas
+#cantidades de observaciones, además de que en el ajuste del largo de los objetos, se hayan perdido variables que pesen
+#más en el analisis
+
+

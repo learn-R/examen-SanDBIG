@@ -1,0 +1,33 @@
+# Cargar Paquetes ---------------------------------------------------------
+
+pacman::p_load(tidyverse,
+               haven,
+               dplyr,
+               magrittr,
+               sjmisc, #Para explorar datos
+               sjPlot, #Para los gráficos
+               ggpubr, #Para incorporar correlación en scatterplot (grid)
+               grid, #Para incorporar correlación en scatterplot
+               ggrepel, #Para evitar solapamientos en gráfico
+               forcats,
+               car,
+               knitr,
+               srvyr,
+               sjlabelled,
+               knitr,
+               srvyr)
+
+# Cargar Datos -------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+# Procesamiento -----------------------------------------------------------
+
+
