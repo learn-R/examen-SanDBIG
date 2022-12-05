@@ -3,7 +3,7 @@
     "path": "D:/Ciencias Politicas/06. Sexto Semestre/OFC R/Examen/examen-SanDBIG/r/02-Análisis.Rmd",
     "project_path": "r/02-Análisis.Rmd",
     "type": "r_markdown",
-    "hash": "35678808",
+    "hash": "4000101755",
     "contents": "",
     "dirty": false,
     "created": 1670212348892.0,
@@ -13,15 +13,18 @@
         "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "2,32",
-        "scrollLine": "0"
+        "cursorPosition": "18,0",
+        "scrollLine": "2",
+        "rmdVisualMode": "false",
+        "rmdVisualCollapsedChunks": "",
+        "rmdVisualModeLocation": "2:0"
     },
     "folds": "",
-    "lastKnownWriteTime": 1670212364,
+    "lastKnownWriteTime": 1670212864,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1670212364061,
+    "last_content_update": 1670212864037,
     "read_only": false,
     "read_only_alternatives": []
 }
