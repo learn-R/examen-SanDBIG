@@ -18,13 +18,8 @@ pacman::p_load(tidyverse,
                srvyr)
 
 # Cargar Datos -------------------------------------------------------------
-
-
-
-
-
-
-
+septiembre_2022 <- read.csv("input/data/Septiembre-2022.csv", sep=";", 
+                            encoding = "UTF-8", stringsAsFactors = F) # se agrega sep=";" ya que las columnas van separadas con ese caracter
 
 
 
