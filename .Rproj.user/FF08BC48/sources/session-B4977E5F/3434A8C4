@@ -3,7 +3,7 @@
     "path": "D:/Ciencias Politicas/06. Sexto Semestre/OFC R/Examen/examen-SanDBIG/r/01-proc.R",
     "project_path": "r/01-proc.R",
     "type": "r_source",
-    "hash": "4085083415",
+    "hash": "4069833684",
     "contents": "",
     "dirty": false,
     "created": 1670211130976.0,
@@ -13,15 +13,15 @@
         "tempName": "Untitled1",
         "source_window_id": "",
         "Source": "Source",
-        "cursorPosition": "27,0",
-        "scrollLine": "0"
+        "cursorPosition": "107,0",
+        "scrollLine": "73"
     },
     "folds": "",
-    "lastKnownWriteTime": 1670215086,
+    "lastKnownWriteTime": 1670295067,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1670215086416,
+    "last_content_update": 1670295067055,
     "read_only": false,
     "read_only_alternatives": []
 }
