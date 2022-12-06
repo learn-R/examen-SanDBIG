@@ -23,7 +23,7 @@ output:
 You can also embed plots, for example:
 
 ```{r Análisis}
-plot(pressure)
+plot(modelo)
 #Para efectos de este analisis fueron usadas para crear los datos procesados las variables
 #id,tamano,categoria,sexo,grupo,remuneracion_ordinaria, para el objeto exp fueron las dos #variables anteriormente nombradas
 ```

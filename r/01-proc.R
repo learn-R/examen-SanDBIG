@@ -105,10 +105,17 @@ datos_proc <- datos_proc %>%
 objeto_exp  <- datos_proc %>% 
   as_survey_design(ids = id, weights = remuneracion_ordinaria )
 
+#Modelo Lm
+modelo1 <- lm(grupo ~ id,
+              data = objeto_exp, 
+              weights = remuneracion_ordinaria)
 
 
+#remuneracion y grupo
 
+modelo <- select(datos_proc,
+                 grupo,
+                 remuneracion_ordinaria)
 
-
-
+plot(modelo)
 
