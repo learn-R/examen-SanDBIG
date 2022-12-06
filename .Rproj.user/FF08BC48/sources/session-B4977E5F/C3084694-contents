@@ -2,21 +2,20 @@
 title: "Examen Diego Iturrieta"
 author: "Diego Iturrieta Gajardo"
 date: "2022-12-05"
-output: html_document
+output:
+  pdf_document: default
+  html_document: default
 ---
 
 ```{r Abstract}
+#En esta investigación mediante el uso de la encuesta ir-icmo de septiembre del 2022
+#del ine, se busca encontrar de manera adecuada la diferencia de la remuneración ordinaria #de los diferentes grupos economicos contenidos en esta encuesta.
 
 ```
 
-## R Markdown
-
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
-
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
 
 ```{r Introducción}
-
+#El analisis de esta investigación está contenido en base al objeto exp creado en esta #investigación, dicho objeto está creado con la variable id de empresa y la variable de #remuneración ordinaria
 ```
 
 ## Including Plots
@@ -25,10 +24,11 @@ You can also embed plots, for example:
 
 ```{r Análisis}
 plot(pressure)
+#Para efectos de este analisis fueron usadas para crear los datos procesados las variables
+#id,tamano,categoria,sexo,grupo,remuneracion_ordinaria, para el objeto exp fueron las dos #variables anteriormente nombradas
 ```
 
 ```{r Conclusión}
-
+#En conclusion, el grupo que gana las mayores cantidades de sueldo son 
 ```
 
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
